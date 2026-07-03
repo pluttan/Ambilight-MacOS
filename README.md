@@ -1,42 +1,53 @@
-<p align="center"><img src="http://app.shopsline.ru/img-pic/kf/Hf3e4eb92d8c64b29bbdbb7538dbdf9c6I/DIY-Ambilight-RGB-5050.jpg_q50.jpg" width="50%" /></p>
+<div align="center">
 
-# Ambilight for Mac OS
+# Ambilight macOS
 
-This part of software is a part for your Mac. It works only with Arduino UNO. See [Amilight Arduino part](https://github.com/sergeich5/Ambilight-Arduino-part)
+**Software-driven ambient backlight for macOS via Arduino**
 
-# Instruction
 
-- [Setup your Arduino UNO before use.](https://github.com/sergeich5/Ambilight-Arduino-part)
-- Connect Arduino UNO to your Mac
-- Run ambilight via python 2.7
+</div>
 
-# Check your python version
+A Python script that captures screen edge colors on macOS and drives an RGB 5050 LED strip connected to an Arduino UNO. Configurable LED count per side, pixel sampling density, and Retina display support.
 
-Run this command
+## ■ Features
 
-```sh
-$ python -v
-Python 2.7.16 (default, Jul  5 2020, 02:24:03)
+- ❖ **Real-time screen capture** — samples edge pixels to drive ambient LEDs
+- ❖ **Configurable layout** — set LED count per side (top, right, bottom, left) and offsets
+- ❖ **Retina support** — pixel density multiplier for HiDPI displays
+- ❖ **Auto-detection** — finds Arduino serial port automatically (`/dev/cu.usbserial*`)
+
+## ■ Stack
+
+<div align="center">
+
+| Component | Technology |
+|-----------|------------|
+| Software | Python 2.7 |
+| Screen capture | PyObjC (Quartz CoreGraphics, AppKit) |
+| Hardware | Arduino UNO, RGB 5050 LED strip |
+| Communication | Serial 115200 baud (pySerial) |
+
+</div>
+
+## ■ How It Works
+
+```
+1. Python reads LED layout from config.py (count per side, offsets, Retina multiplier).
+2. PyObjC/Quartz captures the screen edges in real time.
+3. Edge pixels are sampled and mapped to individual LED positions.
+4. Color data is sent to the Arduino over a serial connection at 115200 baud.
+5. Arduino firmware drives the RGB 5050 LED strip with the received colors.
 ```
 
-Required version is 2.7.x
+## ■ Usage
 
-# Configuration
-
-edit `config.py` to your needs
-
-# Run ambilight.py
-
-```sh
-python /path/to/ambilight.py
+```bash
+# Edit config.py with your LED layout
+python ambilight.py
 ```
 
-# Troubleshooting connection
+Requires the [Arduino firmware](https://github.com/sergeich5/Ambilight-Arduino-part) flashed to an Arduino UNO.
 
-In `Arduino.py` check this line
+## ■ License
 
-```python
-            if 'tty.usbmodem' in port:
-```
-
-and change it regarding to your connected device. (For example Arduino on Mac is called `dev/tty.usbmodem143241101` so it will be detected, you don't have to change anything). Older models can be called `wchusbserial14`, then you have to change them accordingly.
+MIT © [pluttan](https://github.com/pluttan)
